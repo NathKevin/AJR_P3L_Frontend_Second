@@ -115,10 +115,10 @@
                                         </v-row>
                                         <v-row dense>
                                             <v-col cols="2">
-                                                <p class="text-left ml-4">Nama Driver</p>
+                                                <p v-if="driverShow(item.idDriver)" class="text-left ml-4">Nama Driver</p>
                                             </v-col>
                                             <v-col cols="1">
-                                                <p class="text-left">:</p>
+                                                <p v-if="driverShow(item.idDriver)" class="text-left">:</p>
                                             </v-col>
                                             <v-col cols="9">
                                                 <p class="text-left" v-if="driverShow(item.idDriver)">{{ DriverNameCollection[key] }}</p>
@@ -144,6 +144,8 @@
         <v-dialog v-model="dialogDetailPembayaran">
             <v-toolbar class="blue darken-4">
                 <h3 class="white--text">Detail Transaksi</h3>
+                <v-spacer></v-spacer>
+                <v-btn outlined  color="white" v-if="formPembayaran.statusTransaksi === 'Selesai'" @click="cetakHandler">Cetak Nota</v-btn>
             </v-toolbar>
             <v-card width="auto" height="auto">
                 <v-container fluid>
@@ -279,10 +281,13 @@
 </template>
 
 <script>
+import jspdf from 'jspdf'
+
 export default {
     name: 'transaksi',
     data() {
         return {
+            idTransaksi: null,
             load: true,
             key: null,
             isTransaksi: false,
@@ -302,6 +307,8 @@ export default {
             discountCollection: [],
             PembayaranCollection: [],
             transaksi: [],
+            transaksiLengkap: {},
+            diff: null,
             formPembayaran:{
                 idPembayaran : null,
                 idMobil : null,
@@ -314,6 +321,9 @@ export default {
                 dendaPeminjaman : null,
                 totalBiaya : null,
                 statusPembayaran : null,
+                statusTransaksi : null,
+                jenisPromo : null,
+                namaDriver : null,
             },
         }
     },
@@ -332,6 +342,8 @@ export default {
         driverShow(idDriver){
             if(this.show2 == true && idDriver != null){
                 return true;
+            }else{
+                return false;
             }
         },
         kembaliShow(item){
@@ -354,6 +366,7 @@ export default {
         },
         checkPromo(){
             if(this.PromoCollection[this.key] != null){
+                this.formPembayaran.jenisPromo = this.PromoCollection[this.key];
                 return this.PromoCollection[this.key];
             }else{
                 return "Tidak Menggunakan Promo"
@@ -367,6 +380,8 @@ export default {
             }
         },
         detailPembayaran(item, key){
+            this.idTransaksi = item.idTransaksi;
+            this.formPembayaran.statusTransaksi = item.statusTransaksi;
             this.formPembayaran.idPembayaran = this.PembayaranCollection[key].idPembayaran;
             this.formPembayaran.idMobil = this.PembayaranCollection[key].idMobil;
             this.formPembayaran.idPromo = this.PembayaranCollection[key].idPromo;
@@ -380,6 +395,123 @@ export default {
             this.formPembayaran.statusPembayaran = this.PembayaranCollection[key].statusPembayaran;
             this.key = key;
             this.dialogDetailPembayaran = true;
+        },
+        async cetakHandler(){
+            var url = this.$api + '/showLengkap/transaksi/' + this.idTransaksi;
+            await this.$http.get(url, {
+                  headers: {
+                      'Authorization' : 'Bearer ' + sessionStorage.getItem('token')
+                  }
+            }).then(response => {
+                this.transaksiLengkap = response.data.data;
+                this.diff = response.data.diff.diff;
+                this.cetakNota();
+            })
+        },
+        cetakNota(){
+            var pdf = new jspdf();
+            pdf.rect(20, 55, 170, 113)
+            pdf.setFontSize(14);
+            pdf.setFont(undefined,'bold')
+            pdf.text('Nota Transaksi',105,20, null, null, 'center');
+            pdf.setFontSize(14);
+            pdf.text('Atma Jogja Rental',105,30, null, null, 'center');
+            pdf.setFont(undefined,'normal')
+            pdf.line(20,35,190,35);
+            pdf.setFontSize(11);
+            pdf.setFont(undefined,'bold')
+            pdf.text('Nota Transaksi Sewa Mobil',20,50);
+            pdf.setFont(undefined,'bold')
+            pdf.text('Atma Rental',105,60, null, null, 'center');
+            pdf.setFont(undefined,'normal')
+            pdf.text(this.transaksiLengkap.idTransaksi,22,65);
+            pdf.text(this.transaksiLengkap.tanggalTransaksi,152,65);
+            pdf.line(20,67,190,67)
+            pdf.text('Cust   :', 22, 73)
+            pdf.text(this.transaksiLengkap.namaCustomer, 65, 73)
+            pdf.text('PRO :', 152, 73)
+            if(this.transaksiLengkap.idPromo != null){
+                pdf.text(this.transaksiLengkap.kode, 165, 73)
+            }else{
+                pdf.text('-', 165, 73)
+            }
+            pdf.text('CS     :', 22, 79)
+            pdf.text(this.transaksiLengkap.namaPegawai, 65, 79)
+            pdf.text('DRV   :', 22, 85)
+            if(this.transaksiLengkap.idDriver != null){
+                pdf.text(this.transaksiLengkap.namaDriver, 65, 85)
+            }else{
+                pdf.text('-', 65, 85)
+            }
+            pdf.line(20,88,190,88)
+            pdf.line(20,95,190,95)
+            pdf.line(20,95,65,88)
+            pdf.line(65,95,105,88)
+            pdf.line(105,95,150,88)
+            pdf.line(150,95,190,88)
+            pdf.setFont(undefined,'bold')
+            pdf.text('Nota Transaksi',106,99, null, null, 'center');
+            pdf.setFont(undefined,'normal')
+            pdf.line(20,100,190,100)
+            pdf.text('Tgl Mulai',22,104);
+            pdf.text(this.transaksiLengkap.tanggalWaktuSewa,65,104);
+            pdf.line(20,105,190,105)
+            pdf.text('Tgl Selesai',22,109);
+            pdf.text(this.transaksiLengkap.tanggalWaktuSelesai,65,109);
+            pdf.line(20,110,190,110)
+            pdf.text('Tgl Pengembalian',22,114);
+            pdf.text(this.transaksiLengkap.tanggalWaktuKembali,65,114);
+            pdf.line(20,115,190,115)
+            pdf.setFont(undefined,'bold')
+            pdf.text('Item',22,120);
+            pdf.text('Satuan',65,120);
+            pdf.text('Durasi',107,120);
+            pdf.text('Sub Total',152,120);
+            pdf.line(20,121,190,121);
+            pdf.setFont(undefined,'normal')
+            pdf.setFontSize(10);
+            pdf.text(this.transaksiLengkap.namaMobil,22,125);
+             pdf.line(20,126,190,126);
+            if(this.transaksiLengkap.idDriver != null){
+                pdf.text(this.transaksiLengkap.namaDriver, 22, 130)
+                pdf.text(String(this.transaksiLengkap.hargaSewaDriver),65,130);
+                pdf.text(this.diff + ' hari',107,130);
+            }else{
+                pdf.text('-', 22, 130)
+                pdf.text('0',65,130);
+                pdf.text('-',107,130);
+            }
+            pdf.text(String(this.transaksiLengkap.hargaSewaMobil),65,125);
+            pdf.text(this.diff + ' hari',107,125);
+            pdf.text(String(this.transaksiLengkap.totalBiayaMobil),152,125);
+            pdf.text(String(this.transaksiLengkap.totalBiayaDriver),152,130);
+            pdf.line(20,131,190,131);
+            var biayaKotor = this.transaksiLengkap.totalBiayaMobil + this.transaksiLengkap.totalBiayaDriver;
+            pdf.setFont(undefined,'bold')
+            pdf.text(String(biayaKotor),152,136);
+            pdf.setFont(undefined,'normal')
+            pdf.line(20,137,190,137)
+            pdf.line(20,144,190,144)
+            pdf.line(20,144,65,137)
+            pdf.line(65,144,105,137)
+            pdf.line(105,144,150,137)
+            pdf.line(150,144,190,137)
+            pdf.text('Disc',107,149);
+            pdf.text(String(this.transaksiLengkap.totalPromo),152,149);
+            pdf.line(104,150,190,150)
+            pdf.text('Denda',107,155);
+            pdf.text(String(this.transaksiLengkap.dendaPeminjaman),152,155);
+            pdf.line(104,156,190,156)
+            pdf.text('Total',107,161);
+            pdf.setFont(undefined,'bold')
+            pdf.text(String(this.transaksiLengkap.totalBiaya),152,161);
+            pdf.setFont(undefined,'normal')
+            pdf.text('Cust',22,149);
+            pdf.text('CS',65,149);
+            pdf.text(this.transaksiLengkap.namaCustomer,22,166);
+            pdf.text(this.transaksiLengkap.namaPegawai,65,166);
+            //pdf.output('dataurlnewwindow');
+            pdf.save('Nota Transaksi-' + this.idTransaksi);
         },
         async showByCustomer(){
             var url = this.$api + '/showAllCustomer/transaksi/' + sessionStorage.getItem('id');
@@ -415,21 +547,6 @@ export default {
                     this.CsNameCollection.push(response.data.data.namaPegawai); 
                 }
                 this.show = true;
-            })
-        },
-        async getDriverName(item) {
-            var url = this.$api + '/show/driver/' + item;
-            await this.$http.get(url, {
-                  headers: {
-                      'Authorization' : 'Bearer ' + sessionStorage.getItem('token')
-                  }
-            }).then(response => {
-                if(response.data.data != null){
-                    this.DriverNameCollection.push(response.data.data.namaDriver); 
-                }else{
-                    this.DriverNameCollection.push(null); 
-                }
-                this.show2 = true;
             })
         },
         async getCarName(item) {
@@ -476,7 +593,22 @@ export default {
         async afterRequestLoaded() {
             if(this.transaksi != null || this.PembayaranCollection != null){
                 this.transaksi.forEach(async (request) => await this.getCustomerServiceName(request.idPegawai));
-                this.transaksi.forEach(async (request) => await this.getDriverName(request.idDriver));
+                for(let i=0 ; i<this.transaksi.length; i++){
+                    var url = this.$api + '/show/driver/' + this.transaksi[i].idDriver;
+                    await this.$http.get(url, {
+                        headers: {
+                            'Authorization' : 'Bearer ' + sessionStorage.getItem('token')
+                        }
+                    }).then(response => {
+                        if(response.data.data != null){
+                            this.DriverNameCollection.push(response.data.data.namaDriver); 
+                        }else{
+                            this.DriverNameCollection.push(null); 
+                        }
+                        this.show2 = true;
+                    })
+                }
+                // this.transaksi.forEach(async (request) => await this.getDriverName(request.idDriver));
                 this.PembayaranCollection.forEach(async (request) => await this.getCarName(request.idMobil));
                 this.PembayaranCollection.forEach(async (request) => await this.getPromo(request.idPromo));
             }else{

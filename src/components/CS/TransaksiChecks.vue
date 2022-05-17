@@ -108,7 +108,9 @@
                             <v-icon>mdi-dots-vertical</v-icon>
                             </v-btn>
                         </template>
-                        <v-btn class="blue darken-4 white--text" small @click="detailHandler(item, 'Detail')" > Detail </v-btn>
+                        <v-card width="250">
+                            <v-btn block outlined color="blue darken-4" class=" white--text" small @click="detailHandler(item, 'Detail')" > Detail Transaksi </v-btn>
+                        </v-card>
                     </v-menu>
                 </template>
             </v-data-table>
@@ -137,7 +139,9 @@
                             <v-icon>mdi-dots-vertical</v-icon>
                             </v-btn>
                         </template>
-                        <v-btn class="blue darken-4 white--text" small @click="detailHandler(item, 'Detail')" > Detail </v-btn>
+                         <v-card width="250">
+                            <v-btn block outlined color="blue darken-4" class=" white--text" small @click="detailHandler(item, 'Detail')" > Detail Transaksi </v-btn>
+                        </v-card>
                     </v-menu>
                 </template>
             </v-data-table>
@@ -167,9 +171,11 @@
                             <v-icon>mdi-dots-vertical</v-icon>
                             </v-btn>
                         </template>
-                        <v-card width="auto" max-width="auto" height="auto" max-height="auto">
-                            <v-btn outlined color="blue darken-4" class=" white--text" small @click="detailHandler(item, 'Detail')" > Detail </v-btn>
-                            <v-btn class="green darken-2 white--text" small @click="detailHandler(item, 'Selesai')" > Selesai </v-btn>
+                        <v-card width="250">
+                            <v-btn block outlined color="blue darken-4" class=" white--text" small @click="detailHandler(item, 'Detail')" > Detail Transaksi </v-btn>
+                            <v-btn block class="blue lighten-1 white--text" small @click="detailHandler(item, 'Kembali')" > Mobil Kembali </v-btn>
+                            <v-btn block class="blue darken-3 white--text" small @click="detailHandler(item, 'Status')" > Ubah Status Pembayaran </v-btn>
+                            <v-btn block class="green darken-2 white--text" small @click="detailHandler(item, 'Selesai')" > Transaksi Selesai </v-btn>
                         </v-card>
                     </v-menu>
                 </template>
@@ -200,7 +206,9 @@
                             <v-icon>mdi-dots-vertical</v-icon>
                             </v-btn>
                         </template>
-                        <v-btn class="blue darken-4 white--text" small @click="detailHandler(item, 'Detail')" > Detail </v-btn>
+                       <v-card width="250">
+                            <v-btn block outlined color="blue darken-4" class=" white--text" small @click="detailHandler(item, 'Detail')" > Detail Transaksi </v-btn>
+                        </v-card>
                     </v-menu>
                 </template>
             </v-data-table>
@@ -231,7 +239,9 @@
                             <v-icon>mdi-dots-vertical</v-icon>
                             </v-btn>
                         </template>
-                        <v-btn class="blue darken-4 white--text" small @click="detailHandler(item, 'Detail')" > Detail </v-btn>
+                         <v-card width="250">
+                            <v-btn block outlined color="blue darken-4" class=" white--text" small @click="detailHandler(item, 'Detail')" > Detail Transaksi </v-btn>
+                        </v-card>
                     </v-menu>
                 </template>
             </v-data-table>
@@ -261,7 +271,9 @@
                             <v-icon>mdi-dots-vertical</v-icon>
                             </v-btn>
                         </template>
-                        <v-btn class="blue darken-4 white--text" small @click="detailHandler(item, 'Detail')" > Detail </v-btn>
+                         <v-card width="250">
+                            <v-btn block outlined color="blue darken-4" class=" white--text" small @click="detailHandler(item, 'Detail')" > Detail Transaksi </v-btn>
+                        </v-card>
                     </v-menu>
                 </template>
             </v-data-table>
@@ -272,6 +284,7 @@
                 <v-app-bar color="white--text" class="blue darken-4">
                     <span >Detail Transaksi Customer</span>
                     <v-spacer></v-spacer>
+                    <v-btn outlined  color="white" v-if="this.detailForm.buktiTransfer != null" @click="dialogBukti = true">Bukti Transfer</v-btn>
                     <v-menu v-if="this.detailForm.statusTransaksi == 'Menunggu Konfirmasi'" offset-y>
                     <template v-slot:activator="{ on: menu}">   
                         <v-btn  v-on="menu" small elevation="8" plain outlined class="blue lighten-4 mr-5" color="black" >Ubah Status Transaksi </v-btn>
@@ -660,6 +673,55 @@
             </v-card>
         </v-dialog>
 
+        <v-dialog v-model="dialogKonfirmasi" width="500">
+            <v-card elevation="10" width="auto" height="auto">
+                <v-toolbar color="white--text" class="yellow darken-3">
+                    <span  class="headline">Konfirmasi Pelunasan</span>
+                </v-toolbar>
+                <h4 class="mt-5" >Pastikan Customer telah membayar / mengupload bukti transfer</h4>
+                <br>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" text @click="dialogKonfirmasi = !dialogKonfirmasi"> Cancel </v-btn>
+                    <v-btn color="blue darken-1" text @click="ubahStatusPembayaran()"> OK </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
+        <v-dialog v-model="dialogKonfirmasi2" width="500">
+            <v-card elevation="10" width="auto" height="auto">
+                <v-toolbar color="white--text" class="yellow darken-3">
+                    <span  class="headline">Transaksi Telah Selesai?</span>
+                </v-toolbar>
+                <h4 class="mt-5" >Pastikan seluruh proses transaksi telah selesai. Mobil telah kembali dan Pembayaran telah lunas</h4>
+                <br>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" text @click="dialogKonfirmasi2 = !dialogKonfirmasi2"> Cancel </v-btn>
+                    <v-btn color="blue darken-1" text @click="editStatusTransaksi()"> OK </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
+        <v-dialog v-model="dialogBukti" width="700">
+            <v-card elevation="10" width="auto" height="auto">
+                <v-toolbar color="white--text" class="blue darken-4">
+                    <span  class="headline">Bukti Transfer</span>
+                    <v-spacer></v-spacer>
+                    <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn @click="dialogBukti = !dialogBukti" router v-bind="attrs" v-on="on" icon fab> 
+                                <v-icon color="white">mdi-close-circle</v-icon>
+                            </v-btn>
+                        </template>
+                        <span>Exit</span>
+                    </v-tooltip>
+                </v-toolbar>
+                 <v-img v-if="this.detailForm.buktiTransfer != null" :src="$baseUrl+'/storage/'+this.detailForm.buktiTransfer" max-height="1000" max-width="700" class=""></v-img>
+                <br>
+            </v-card>
+        </v-dialog>
+
          <v-snackbar v-model="snackbar" :color="color" timeout="3000" bottom >
             <div v-for="(errorInArray, i) in error_message" :key="i">
                 <div v-for="(errorOutArray, i) in errorInArray" :key="i">
@@ -694,6 +756,9 @@ export default {
             error_message: null,
             dialog: false,
             dialogSelesai: false,
+            dialogKonfirmasi: false,
+            dialogKonfirmasi2: false,
+            dialogBukti: false,
             editId: null,
             showDiterima: false,
             showInProgress: false,
@@ -752,6 +817,7 @@ export default {
                 besarPromo : null,
                 namaMobil : null,
                 platNomor: null,
+                statusKetersediaanMobil: null,
                 metodePembayaran : null,
                 totalPromo : null,
                 totalBiayaMobil : null,
@@ -762,6 +828,7 @@ export default {
                 statusTransaksi: null,
                 hargaSewaDriver : null,
                 hargaSewaMobil : null,
+                buktiTransfer : null,
             },
             formBiaya: {
                 totalPromo : null,
@@ -947,9 +1014,32 @@ export default {
                 this.load = false;
             });
         },
+        editStatusTransaksi(){
+            let newData = {
+                statusTransaksi : "Selesai"
+            };
+            var url = this.$api + '/updateStatus/transaksi/' + this.editId;
+            this.load = true;
+            this.$http.put(url, newData, {
+                headers: {
+                    'Authorization' : 'Bearer ' + sessionStorage.getItem('token')
+                }
+            }).then(response => {
+                this.success_message = response.data.message;
+                this.color = "green";
+                this.snackbar2 = true;
+                this.load = false;
+                location.reload();
+            }).catch(error => {
+                this.error_message = error.response.data.message;
+                this.color = "red";
+                this.snackbar = true;
+                this.load = false;
+            });
+        },
         editStatusMobil(){
             let newData = {
-                statusKetersediaanMobil : 0
+                statusKetersediaanMobil : !this.detailForm.statusKetersediaanMobil
             };
             var url = this.$api + '/updateStatus/mobil/' + this.detailForm.idMobil;
             this.load = true;
@@ -1048,13 +1138,36 @@ export default {
                     this.success_message = response.data.message;
                     this.snackbar2 = true;
                     this.color = 'green';
-                    location.reload()
+                    this.editStatusMobil()
                 }).catch(error => {
                     this.error_message = error.response.data.message;
                     this.color = "red";
                     this.snackbar = true;
                 });
             }
+        },
+        async ubahStatusPembayaran(){
+            let newData = {
+                statusPembayaran : !this.detailForm.statusPembayaran,
+            };
+            var url = this.$api + '/updateStatus/pembayaran/' + this.detailForm.idPembayaran;
+            this.load = true;
+            await this.$http.put(url, newData, {
+                headers: {
+                    'Authorization' : 'Bearer ' + sessionStorage.getItem('token')
+                }
+            }).then(response => {
+                this.success_message = response.data.message;
+                this.color = "green";
+                this.snackbar2 = true;
+                this.load = false;
+                location.reload()
+            }).catch(error => {
+                this.error_message = error.response.data.message;
+                this.color = "red";
+                this.snackbar = true;
+                this.load = false;
+            });
         },
         detailHandler(item, status){
             this.editId = item.idTransaksi;
@@ -1101,6 +1214,7 @@ export default {
             }
             this.detailForm.namaMobil = item.namaMobil;
             this.detailForm.platNomor = item.platNomor;
+            this.detailForm.statusKetersediaanMobil = item.statusKetersediaanMobil;
             this.detailForm.hargaSewaMobil = item.hargaSewaMobil;
             this.detailForm.metodePembayaran = item.metodePembayaran;
             this.detailForm.totalPromo = item.totalPromo;
@@ -1110,10 +1224,27 @@ export default {
             this.detailForm.dendaPeminjaman = item.dendaPeminjaman;
             this.detailForm.statusPembayaran = item.statusPembayaran;
             this.detailForm.statusTransaksi = item.statusTransaksi;
+            this.detailForm.buktiTransfer = item.buktiTransfer;
             if(status == 'Detail'){
                 this.dialog = !this.dialog;
-            }else{
+            }else if(status == 'Kembali'){
                 this.dialogSelesai = !this.dialogSelesai;
+            }else if(status == 'Status'){
+                if(this.detailForm.tanggalWaktuKembali == 'Belum Kembali'){
+                    this.success_message = 'Mobil Belum Kembali';
+                    this.color = "red";
+                    this.snackbar2 = true;
+                }else{
+                    this.dialogKonfirmasi = !this.dialogKonfirmasi;
+                }
+            }else{
+                if(this.detailForm.statusPembayaran == 1){
+                    this.dialogKonfirmasi2 = !this.dialogKonfirmasi2;
+                }else{
+                    this.success_message = 'Transaksi Belum Lunas';
+                    this.color = "red";
+                    this.snackbar2 = true;
+                }
             }
         },
         close(){

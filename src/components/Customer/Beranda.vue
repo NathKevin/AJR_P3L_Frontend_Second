@@ -285,15 +285,20 @@
                     <span  class="headline">Total Pembayaran</span>
                 </v-toolbar>
                     <v-col sm="12" md="12" lg="8" xl="8">
-                        <p class="text-left ml-5"> Total Biaya Driver : Rp {{ transaksi.totalBiayaDriver }},00</p>
-                        <p class="text-left ml-5"> Total Biaya Mobil : Rp {{ transaksi.totalBiayaMobil }},00</p>
-                        <p class="text-left ml-5"> Diskon : {{ besarPromo * 100 }}%</p>
-                        <p class="text-left ml-5"> Total Diskon : Rp {{ transaksi.totalPromo }},00</p>
-                        <p class="text-left ml-5"> Total Biaya Akhir : Rp {{ transaksi.totalBiaya }},00</p>
+                        <p v-if="transaksi != null" class="text-left ml-5"> Total Biaya Driver : Rp {{ transaksi.totalBiayaDriver }},00</p>
+                        <p v-if="transaksi != null" class="text-left ml-5"> Total Biaya Mobil : Rp {{ transaksi.totalBiayaMobil }},00</p>
+                        <p v-if="transaksi != null" class="text-left ml-5"> Diskon : {{ besarPromo * 100 }}%</p>
+                        <p v-if="transaksi != null" class="text-left ml-5"> Total Diskon : Rp {{ transaksi.totalPromo }},00</p>
+                        <p v-if="transaksi != null" class="text-left ml-5"> Denda Peminjaan : Rp {{ transaksi.dendaPeminjaman }},00</p>
+                        <p v-if="transaksi != null" class="text-left ml-5"> Total Biaya Akhir : Rp {{ transaksi.totalBiaya }},00</p>
+                    </v-col>
+                    <v-col>
+                        <p v-if="transaksi != null && bukti != null"  class="text-left ml-5">Bukti Transfer :</p>
+                         <v-img v-if="transaksi != null" :src="$baseUrl+'/storage/'+bukti" max-height="400" max-width="200" class="ml-10 mb-4"></v-img>
                     </v-col>
                     <v-col>
                         <v-file-input
-                            v-if="transaksi.metodePembayaran == 'Transfer'"
+                            v-if="metodePembayaran == 'Transfer' && transaksi != null"
                             outlined
                             rounded
                             dense
@@ -304,12 +309,14 @@
                         >
                         </v-file-input>
                     </v-col>
-                    <v-card-actions>
+                    <v-toolbar v-if="metodePembayaran == 'Cash' && transaksi != null" class="mr-10 ml-10 yellow darken-3" >Pembayaran Cash langsung menuju Customer Service</v-toolbar>
+                    <v-card-actions class="mt-5">
                         <v-spacer></v-spacer>
                         <v-btn
+                            v-if="metodePembayaran == 'Transfer' && transaksi != null"
                             color="blue darken-4"
                             class="white--text"
-                            @click="confirmHandler"
+                            @click="confirmBayarHandler"
                         >
                             Bayar
                         </v-btn>
@@ -340,6 +347,8 @@ export default {
     name: 'transaksi',
     data() {
         return {
+            bukti: null,
+            metodePembayaran: null,
             idMobil: null,
             dialogWarning: false,
             dialogConfirm: false,
@@ -371,6 +380,7 @@ export default {
             form:{
                 statusTransaksi : null,
             },
+            buktiTransfer : new FormData,
         }
     },
     methods: {
@@ -380,6 +390,37 @@ export default {
             }else{
                 this.dialogTolakBayar = true;
             }
+        },
+        confirmBayarHandler(){
+            var temp = document.getElementById('file1');
+
+            if(temp.files[0]){
+                this.buktiTransfer.append('buktiTransfer', temp.files[0]);
+            }else{
+                this.success_message = 'Bukti Transfer Tidak Boleh Kosong';
+                this.color = "red";
+                this.snackbar2 = true;
+                return;
+            }
+
+            var url = this.$api + '/updateBuktiTransfer/pembayaran/' + this.transaksi.idPembayaran;
+            this.load = true;
+            this.$http.post(url, this.buktiTransfer, {
+                headers: {
+                    'Authorization' : 'Bearer ' + sessionStorage.getItem('token')
+                }
+            }).then(response => {
+                this.success_message = response.data.message;
+                this.color = "green";
+                this.snackbar2 = true;
+                this.load = false;
+                location.reload();
+            }).catch(error => {
+                this.error_message = error.response.data.message;
+                this.color = "red";
+                this.snackbar = true;
+                this.load = false;
+            });
         },
         cekDateandTime(item){
 
@@ -446,6 +487,8 @@ export default {
                 this.load = false;
                 this.other = false;
             }else{
+                this.bukti = this.transaksi.buktiTransfer;
+                this.metodePembayaran = this.transaksi.metodePembayaran;
                 this.load=false;
                 this.isTransaksi = true;
                 this.empty = false;
