@@ -1,6 +1,6 @@
 <template>
     <v-main class="ubahEmail">
-        <br><br><br><br><br>
+        <br><br><br><br>
         <v-progress-circular
             size="60"
             v-if="load"
@@ -8,7 +8,8 @@
             color="primary"
         ></v-progress-circular>
         <v-overlay :value="load"></v-overlay>
-        <v-container class="backgroundContainer" fill-height fluid>
+
+        <v-container v-show="breakPointMobile" class="backgroundContainer" fill-height fluid>
             <v-row justify="center" align="center">
                 <v-card v-if="dialog" elevation="20" class="backgroundCard" width="800" height="500" max-height="600" max-width="900">
                     <v-row>
@@ -75,6 +76,65 @@
             </v-row>
         </v-container>
 
+        <v-container v-show="breakPointMobile1" fluid>
+            <v-card color="blue darken-4" class="overlap2" height="auto" width="auto" >
+                <br>
+                <v-card-sub-title >
+                    <h5 class="ml-5 mr-5 white--text" style="text-align:justify;">
+                        Pastikan email anda aktif dan dapat digunakan.
+                    </h5>
+                </v-card-sub-title>
+                <br>
+                <v-card-sub-title >
+                    <h5 class="ml-5 mr-5 white--text" style="text-align:left;">
+                        Panduan Ubah Email :
+                    </h5>
+                </v-card-sub-title>
+                <v-card-sub-title >
+                    <h5 class="ml-5 mr-5 white--text" style="text-align:left;">
+                        1. Email yang tertampil adalah email anda yang lama
+                    </h5>
+                    <h5 class="ml-5 mr-5 white--text" style="text-align:left;">
+                        2. Gantilah dengan email baru sesuai dengan format email. ex : atmajogjarentalexample@gmail.com
+                    </h5>
+                </v-card-sub-title>
+                <br>
+            </v-card>
+        </v-container>
+
+        <v-container v-show="breakPointMobile1" fluid>
+                <v-card v-if="dialog" elevation="20" height="auto" width="auto">
+                    <v-card-title class="justify-center ">
+                        <h3 style="margin-top:70px;">ATMA JOGJA RENTAL</h3>
+                    </v-card-title>
+                    <v-card-sub-title>
+                        <h5>Ubah Email</h5>
+                    </v-card-sub-title>
+                    <br>
+                    <br>
+                    <br>
+                    <v-container>
+                        <v-form ref="form">
+                            <v-text-field
+                                dense
+                                outlined
+                                rounded
+                                v-model="form.email"
+                                label="Email"
+                                :rules="rules.null"
+                            >
+                            </v-text-field>
+                        </v-form>
+                        <br><br>
+                        <v-btn plain class="btnLogin blue darken-4" >
+                            <span @click="dialogWarning = !dialogWarning" class="btnLogin2 white--text">Ubah</span>
+                        </v-btn>
+                        <br><br><br><br><br><br>
+                    </v-container>
+                </v-card>
+                <br><br>
+        </v-container>
+
         <v-dialog v-model="dialogWarning" width="500">
             <v-card elevation="10" width="auto" height="auto">
                 <v-toolbar color="white--text" class="yellow darken-3">
@@ -130,6 +190,24 @@ export default {
         }
     },
 
+    computed:{
+        breakPointMobile(){
+            if(this.$vuetify.breakpoint.width > 620){
+                return true
+            }else{
+                return false
+            }
+        },
+
+        breakPointMobile1(){
+            if(this.$vuetify.breakpoint.width <= 620){
+                return true
+            }else{
+                return false
+            }
+        },
+    },
+
     methods:{
         toHome(){
             this.$router.push({
@@ -149,12 +227,13 @@ export default {
                     this.snackbar2 = true;
                     this.load = false;
                     this.dialog = true;
+                    this.dialogWarning = false;
                 }).catch(error => {
                     this.error_message = error.response.data.message;
                     this.color = "red";
                     this.snackbar = true;
-                    sessionStorage.removeItem('token');
                     this.load = false;
+                    this.dialogWarning = false;
                     this.dialog = true;
                 })
             }else{
@@ -227,6 +306,12 @@ export default {
 
 .overlap{
    position:absolute;
+   animation: fadeInAnimation ease 3s;
+    animation-iteration-count: 0.65;
+    animation-fill-mode: forwards;
+}
+
+.overlap2{
    animation: fadeInAnimation ease 3s;
     animation-iteration-count: 0.65;
     animation-fill-mode: forwards;

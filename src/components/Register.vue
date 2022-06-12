@@ -2,16 +2,20 @@
     <v-main class="login">
 
         <v-navigation-drawer class="blue darken-4" v-model="sidebar" app disable-resize-watcher>
-            <v-list dense nav>
+            <v-toolbar class="blue darken-4" elevation="10">
+                <p class="white--text" style="margin-top:20px;">Navigation</p>
+            </v-toolbar>
+            <v-list  dense nav style="margin-top:20px;">
                 <v-list-item
-                    v-for="item in menuItems"
-                    :key="item.title"
-                    link
-                    tag="router-link"
-                    :to="item.path"
-                    class="yellow darken-3"
-                    color="yellow darken-1"
-                >
+                v-for="item in menuItems"
+                :key="item.title"
+                link
+                :to="item.path"
+                class="yellow darken-3"
+                color="yellow darken-1">
+                    <v-list-item-icon>
+                        <v-icon color="white" v-text="item.icon"></v-icon>
+                    </v-list-item-icon>
                     <v-list-item-content >
                         <v-list-item-title class="white--text" v-text="item.title"></v-list-item-title>
                     </v-list-item-content>
@@ -20,7 +24,7 @@
         </v-navigation-drawer>
 
         <v-app-bar fixed hide-on-scroll elevation="7" class="blue darken-4">
-            <span class="hidden-md-and-up">
+            <span class="hidden-lg-and-up">
                 <v-app-bar-nav-icon @click="sidebar = !sidebar">
                 </v-app-bar-nav-icon>
             </span>
@@ -34,7 +38,7 @@
             </router-link>
         </v-app-bar>
 
-        <v-container class="backgroundContainer mt-15" fill-height fluid>
+        <v-container v-show="breakPointMobile" class="backgroundContainer mt-15" fill-height fluid>
             <v-row justify="center" align="center">
                 <v-card elevation="20" class="backgroundCard" width="800" height="1400" max-height="1500" max-width="900">
                     <v-row>
@@ -258,6 +262,221 @@
             </v-row>
         </v-container>
 
+        <v-container style="margin-top:70px;" v-show="breakPointMobile1" fluid>
+            <v-card color="blue darken-4" class="overlap3 pt-2 pb-2" height="auto" width="auto" >
+                <v-card-sub-title >
+                    <h5 class="ml-5 mr-5 white--text" style="text-align:justify;">
+                        Daftarkan akun anda ke Atma Jogja Rental untuk dapat mengakses penuh fasilitas peminjaman transportasi dan nikmati perjalanan anda bersama keluarga maupun teman di Yogayakarta.
+                    </h5>
+                </v-card-sub-title>
+                <br>
+                <v-card-sub-title >
+                    <h5 class="ml-5 mr-5 white--text" style="text-align:left;">
+                        Pemanduan Pendaftaran :
+                    </h5>
+                </v-card-sub-title>
+                <v-card-sub-title >
+                    <h5 class="ml-5 mr-5 white--text" style="text-align:left;">
+                        1. Semua field input wajib terisi.
+                    </h5>
+                    <h5 class="ml-5 mr-5 white--text" style="text-align:left;">
+                        2. Password terdiri dari Huruf kapital, Huruf kecil, Angka, dan Simbol, serta minimal 8 karakter.
+                    </h5>
+                    <h5 class="ml-5 mr-5 white--text" style="text-align:left;">
+                        3. Upload-lah foto KTP, SIM, ataupun KP dengan data yang valid.
+                    </h5>
+                    <h5 class="ml-5 mr-5 white--text" style="text-align:left;">
+                        4. Jika belum memiliki SIM, Foto SIM dapat dikosongkan.
+                    </h5>
+                </v-card-sub-title>
+            </v-card>
+        </v-container>
+
+        <v-container v-show="breakPointMobile1" fluid>
+            <v-card elevation="20" width="auto" height="1400" max-height="1500" max-width="auto">
+                <v-row justify="center" align="center"> 
+                    <v-form ref="form">
+                        <v-card-title class="justify-center mt-10">
+                            <h3>ATMA JOGJA RENTAL</h3>
+                        </v-card-title>
+                        <v-card-sub-title>
+                            <h5>Register Page</h5>
+                        </v-card-sub-title>
+                        <br>
+                        <v-container>
+                            <v-text-field
+                                dense
+                                outlined
+                                rounded
+                                v-model="form.namaCustomer"
+                                label="Nama"
+                                :rules="rules.null"
+                            >
+                            </v-text-field>
+                            <v-text-field
+                                dense
+                                outlined
+                                rounded
+                                v-model="form.alamatCustomer"
+                                label="Alamat"
+                                :rules="rules.null"
+                            >
+                            </v-text-field>
+                            <div>
+                                <v-menu
+                                    ref="menu1"
+                                    v-model="menu1"
+                                    :close-on-content-click="false"
+                                    transition="scale-transition"
+                                    offset-y
+                                    min-width="auto"
+                                >
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field
+                                    outlined
+                                    dense
+                                    rounded
+                                    v-model="form.tanggalLahirCustomer"
+                                    label="Tanggal Lahir"
+                                    readonly
+                                    v-bind="attrs"
+                                    v-on="on"
+                                    :rules="rules.null"
+                                    ></v-text-field>
+                                </template>
+                                <v-date-picker
+                                    v-model="form.tanggalLahirCustomer"
+                                    :active-picker.sync="activePicker"
+                                    :max="(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)"
+                                    min="1900-01-01"
+                                ></v-date-picker>
+                                </v-menu>
+                            </div>
+                            <v-text-field
+                                dense
+                                outlined
+                                rounded
+                                v-model="form.noTelpCustomer"
+                                label="No. Telepon"
+                                :rules="rules.null"
+                            >
+                            </v-text-field>
+                            <v-text-field
+                                dense
+                                outlined
+                                rounded
+                                v-model="form.email"
+                                label="Email"
+                                :rules="rules.null"
+                            >
+                            </v-text-field>
+                            <v-text-field
+                                dense
+                                outlined
+                                rounded
+                                type="password"
+                                v-model="form.password"
+                                label="Password"
+                                :rules="rules.null"
+                            >
+                            </v-text-field>
+                            <v-radio-group
+                                v-model="form.jenisKelaminCustomer"
+                                label="Jenis Kelamin"
+                                :rules="rules.null"
+                                >
+                                <v-radio
+                                    label="Laki-laki"
+                                    value="Laki-laki"
+                                ></v-radio>
+                                <v-radio
+                                    label="Perempuan"
+                                    value="Perempuan"
+                                ></v-radio>
+                            </v-radio-group>
+                            <v-radio-group
+                                v-model="pelajar"
+                                label="Apakah Anda Seorang Pelajar?"
+                                :rules="rules.null"
+                                >
+                                <v-radio
+                                    label="Ya"
+                                    value="Ya"
+                                ></v-radio>
+                                <v-radio
+                                    label="Tidak"
+                                    value="Tidak"
+                                ></v-radio>
+                            </v-radio-group>
+                            <v-radio-group
+                                v-model="turis"
+                                label="Apakah anda turis dari mancanegara?"
+                                :rules="rules.null"
+                                >
+                                <v-radio
+                                    label="Ya"
+                                    value="Ya"
+                                ></v-radio>
+                                <v-radio
+                                    label="Tidak"
+                                    value="Tidak"
+                                ></v-radio>
+                            </v-radio-group>
+                            <v-radio-group
+                                label="File Berkas :"
+                                >
+                            </v-radio-group>
+                            <v-form ref="addKTPForm">
+                                <v-file-input
+                                    outlined
+                                    rounded
+                                    dense
+                                    label="Foto KTP"
+                                    id="KTP"
+                                    ref="gambarKTP"
+                                    :rules="rules.null"
+                                >
+                                </v-file-input>
+                            </v-form>
+                            <v-form ref="addSIMForm">
+                                <v-file-input
+                                    outlined
+                                    rounded
+                                    dense
+                                    label="Foto SIM"
+                                    id="SIM"
+                                    ref="gambarSIM"
+                                >
+                                </v-file-input>
+                            </v-form>
+                            <v-form ref="addKPForm">
+                                <v-file-input
+                                    outlined
+                                    rounded
+                                    dense
+                                    label="Foto Kartu Pelajar"
+                                    id="KP"
+                                    ref="gambarKP"
+                                    v-if="isPelajar()"
+                                >
+                                </v-file-input>
+                            </v-form>
+                            <br><br>
+                            <v-btn plain class="btnLogin blue darken-4" >
+                                <span @click="submit" class="btnLogin2 white--text">DAFTAR</span>
+                            </v-btn>
+                            <br><br>
+                            <v-card-sub-title >
+                                <h5 class="ml-5 mr-5" style="text-align:center;">
+                                    Sudah memiliki akun? <a href="Login">Login disini</a>
+                                </h5>
+                            </v-card-sub-title>
+                        </v-container>
+                    </v-form>
+                </v-row>
+            </v-card>
+        </v-container>
+
          <v-snackbar v-model="snackbar" :color="color" timeout="3000" bottom >
             <div v-for="(errorInArray, i) in error_message" :key="i">
                 <div v-for="(errorOutArray, i) in errorInArray" :key="i">
@@ -279,6 +498,7 @@ export default {
     data() {
         return{
             menu: null,
+            menu1: null,
             error_message: null,
             success_message: null,
             color: null,
@@ -288,8 +508,10 @@ export default {
             pelajar: null,
             turis: null,
             AJRlogo: image,
-            menuItems:[
-                { title: 'Beranda', path: '/AtmaJayaRental' },
+            menuItems: [
+                { title: 'Beranda', path: '/Beranda', icon: 'mdi-home' },
+                { title: 'Register', path: '/Register', icon: 'mdi-plus' },
+                { title: 'Login', path: '/Login', icon: 'mdi-login' }
             ],
             sidebar: false,
             rules: {
@@ -311,6 +533,24 @@ export default {
                 KP: null,
             },
         }
+    },
+
+    computed:{
+        breakPointMobile(){
+            if(this.$vuetify.breakpoint.width > 620){
+                return true
+            }else{
+                return false
+            }
+        },
+
+        breakPointMobile1(){
+            if(this.$vuetify.breakpoint.width <= 620){
+                return true
+            }else{
+                return false
+            }
+        },
     },
 
     methods:{
@@ -447,6 +687,13 @@ export default {
 
 .overlap{
    position:absolute;
+   animation: fadeInAnimation ease 3s;
+    animation-iteration-count: 0.65;
+    animation-fill-mode: forwards;
+   opacity: 85%;
+}
+
+.overlap3{
    animation: fadeInAnimation ease 3s;
     animation-iteration-count: 0.65;
     animation-fill-mode: forwards;

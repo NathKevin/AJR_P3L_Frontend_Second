@@ -1053,8 +1053,29 @@ export default {
                 this.snackbar2 = true;
                 this.load = false;
                 if(this.detailForm.idDriver != null){
-                    console.log('INI ADA UBAH STATUS DRIVER DARI MOBILE')
+                    this.editStatusDriver();
+                }else{
+                    location.reload();
                 }
+            }).catch(error => {
+                this.error_message = error.response.data.message;
+                this.color = "red";
+                this.snackbar = true;
+                this.load = false;
+            });
+        },
+        editStatusDriver(){
+            var url = this.$api + '/updateStatusKetersediaan/driver/' + this.detailForm.idDriver;
+            this.load = true;
+            this.$http.put(url, {
+                headers: {
+                    'Authorization' : 'Bearer ' + sessionStorage.getItem('token')
+                }
+            }).then(response => {
+                this.success_message = response.data.message;
+                this.color = "green";
+                this.snackbar2 = true;
+                this.load = false;
                 location.reload();
             }).catch(error => {
                 this.error_message = error.response.data.message;

@@ -91,6 +91,8 @@ export default {
             sessionStorage.removeItem("role");
             sessionStorage.removeItem("name");
             sessionStorage.removeItem("picture");
+            sessionStorage.removeItem("idRole");
+            sessionStorage.removeItem("email");
             this.$router.push({
                 name: 'Login',
             });

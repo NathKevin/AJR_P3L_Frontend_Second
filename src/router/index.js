@@ -233,7 +233,7 @@ router.beforeEach((to, from, next) => {
 router.beforeEach((to, from, next) => {
   document.title = to.meta.title;
   if(sessionStorage.getItem('statusBerkas') === 'Ditolak' && to.name !== 'Profil' && sessionStorage.getItem("token")!==null && sessionStorage.getItem("role")==='customer' ){
-      next({ name: 'profil'});
+      next({ name: 'Profil'});
   }else next();
 });
 
@@ -241,7 +241,7 @@ router.beforeEach((to, from, next) => {
   document.title = to.meta.title;
   if(sessionStorage.getItem('statusBerkas') === 'Diterima' && to.name !== 'Beranda' && sessionStorage.getItem("token")!==null && sessionStorage.getItem("role")==='customer' 
   && (to.name !== 'Profil' && to.name !== 'Transaksi' && to.name !== 'TransaksiBaru' && to.name !== 'UbahEmail' && to.name !== 'UbahPassword'  && to.name !== 'TransaksiEdit' )){
-      next({ name: 'beranda'});
+      next({ name: 'Beranda'});
   }else next();
 });
 

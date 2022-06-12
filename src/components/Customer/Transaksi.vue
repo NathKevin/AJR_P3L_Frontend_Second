@@ -22,62 +22,62 @@
                                 <v-list-item-content @click="detailPembayaran(item, key)">
                                     <v-col>
                                         <v-row>
-                                            <v-col cols="2">
+                                            <v-col  xl="2" lg="2" md="3" sm="4">
                                                 <h4 class="text-left ml-4">No. Transaksi</h4>
                                             </v-col>
-                                            <v-col cols="1">
+                                            <v-col  cols="1">
                                                 <h4 class="text-left">:</h4>
                                             </v-col>
-                                            <v-col cols="9">
+                                            <v-col  xl="9" lg="9" md="8" sm="7">
                                                 <h4 class="text-left">{{ item.idTransaksi }}</h4>
                                             </v-col>
                                         </v-row>
                                         <v-row >
-                                            <v-col cols="2">
+                                            <v-col xl="2" lg="2" md="3" sm="4">
                                                 <p class="text-left ml-4">Tanggal Transaksi</p>
                                             </v-col>
                                             <v-col cols="1">
                                                 <p class="text-left">:</p>
                                             </v-col>
-                                            <v-col cols="9">
+                                            <v-col xl="9" lg="9" md="8" sm="7">
                                                 <p class="text-left">{{ item.tanggalTransaksi }}</p>
                                             </v-col>
                                         </v-row>
                                         <v-row dense>
-                                            <v-col cols="2">
+                                            <v-col xl="2" lg="2" md="3" sm="4">
                                                 <p class="text-left ml-4">Tanggal Sewa</p>
                                             </v-col>
                                             <v-col cols="1">
                                                 <p class="text-left">:</p>
                                             </v-col>
-                                            <v-col cols="9">
+                                            <v-col xl="9" lg="9" md="8" sm="7">
                                                 <p class="text-left">{{ item.tanggalWaktuSewa }}</p>
                                             </v-col>
                                         </v-row>
                                         <v-row dense>
-                                            <v-col cols="2">
+                                            <v-col xl="2" lg="2" md="3" sm="4">
                                                 <p class="text-left ml-4">Tanggal Selesai</p>
                                             </v-col>
                                             <v-col cols="1">
                                                 <p class="text-left">:</p>
                                             </v-col>
-                                            <v-col cols="9">
+                                            <v-col xl="9" lg="9" md="8" sm="7">
                                                 <p class="text-left">{{ item.tanggalWaktuSelesai }}</p>
                                             </v-col>
                                         </v-row>
                                         <v-row dense>
-                                            <v-col cols="2">
+                                            <v-col xl="2" lg="2" md="3" sm="4">
                                                 <p class="text-left ml-4">Tanggal Kembali</p>
                                             </v-col>
                                             <v-col cols="1">
                                                 <p class="text-left" >:</p>
                                             </v-col>
-                                            <v-col cols="9">
+                                            <v-col xl="9" lg="9" md="8" sm="7">
                                                 <p class="text-left">{{ kembaliShow(item.tanggalWaktuKembali) }}</p>
                                             </v-col>
                                         </v-row>
                                         <v-row dense justify="start" >
-                                            <v-col cols="2">
+                                            <v-col xl="2" lg="2" md="3" sm="4">
                                                 <p class="text-left ml-4">Status Transaksi</p>
                                             </v-col>
                                             <v-col cols="1">
@@ -103,24 +103,24 @@
                                             </v-chip>
                                         </v-row>
                                         <v-row dense>
-                                            <v-col cols="2">
+                                            <v-col xl="2" lg="2" md="3" sm="4">
                                                 <p class="text-left ml-4">Customer Service</p>
                                             </v-col>
                                             <v-col cols="1">
                                                 <p class="text-left">:</p>
                                             </v-col>
-                                            <v-col cols="9">
+                                            <v-col xl="9" lg="9" md="8" sm="7">
                                                 <p class="text-left" v-if="show">{{ CsNameCollection[key] }}</p>
                                             </v-col>
                                         </v-row>
                                         <v-row dense>
-                                            <v-col cols="2">
+                                            <v-col xl="2" lg="2" md="3" sm="4">
                                                 <p v-if="driverShow(item.idDriver)" class="text-left ml-4">Nama Driver</p>
                                             </v-col>
                                             <v-col cols="1">
                                                 <p v-if="driverShow(item.idDriver)" class="text-left">:</p>
                                             </v-col>
-                                            <v-col cols="9">
+                                            <v-col xl="9" lg="9" md="8" sm="7">
                                                 <p class="text-left" v-if="driverShow(item.idDriver)">{{ DriverNameCollection[key] }}</p>
                                             </v-col>
                                         </v-row>
@@ -150,117 +150,117 @@
             <v-card width="auto" height="auto">
                 <v-container fluid>
                     <v-row dense no-gutters>
-                        <v-col cols="2">
+                        <v-col xl="2" lg="2" md="3" sm="4">
                             <p class="text-left ml-4">Nama Mobil</p>
                         </v-col>
                         <v-col cols="1">
                              <p class="text-left">:</p>
                         </v-col>
-                        <v-col cols="9">
+                        <v-col xl="9" lg="9" md="8" sm="7">
                             <p class="text-left" v-if="show3">{{ MobilCollection[this.key] }}</p>
                         </v-col>
                     </v-row>
                     <v-row dense no-gutters>
-                        <v-col cols="2">
+                        <v-col xl="2" lg="2" md="3" sm="4">
                             <p class="text-left ml-4">Nomor Plat </p>
                         </v-col>
                         <v-col cols="1">
                              <p class="text-left">:</p>
                         </v-col>
-                        <v-col cols="9">
+                        <v-col xl="9" lg="9" md="8" sm="7">
                             <p class="text-left" v-if="show3">{{ noPlatCollection[this.key] }}</p>
                         </v-col>
                     </v-row>
                     <v-row dense no-gutters>
-                        <v-col cols="2">
+                        <v-col xl="2" lg="2" md="3" sm="4">
                             <p class="text-left ml-4">Jenis Promo </p>
                         </v-col>
                         <v-col cols="1">
                              <p class="text-left">:</p>
                         </v-col>
-                        <v-col cols="9">
+                        <v-col xl="9" lg="9" md="8" sm="7">
                             <p class="text-left" v-if="show4">{{ checkPromo() }}</p>
                         </v-col>
                     </v-row>
                     <v-row dense no-gutters>
-                        <v-col cols="2">
+                        <v-col xl="2" lg="2" md="3" sm="4">
                             <p class="text-left ml-4">Besar Promo </p>
                         </v-col>
                         <v-col cols="1">
                              <p class="text-left">:</p>
                         </v-col>
-                        <v-col cols="9">
+                        <v-col xl="9" lg="9" md="8" sm="7">
                             <p class="text-left" v-if="show4">{{ checkPromo2() }}</p>
                         </v-col>
                     </v-row>
                     <v-row dense no-gutters>
-                        <v-col cols="2">
+                        <v-col xl="2" lg="2" md="3" sm="4">
                             <p class="text-left ml-4">Metode Pembayaran </p>
                         </v-col>
                         <v-col cols="1">
                              <p class="text-left">:</p>
                         </v-col>
-                        <v-col cols="9">
+                        <v-col xl="9" lg="9" md="8" sm="7">
                             <p class="text-left" >{{ this.formPembayaran.metodePembayaran }}</p>
                         </v-col>
                     </v-row>
                     <v-row dense no-gutters>
-                        <v-col cols="2">
+                        <v-col xl="2" lg="2" md="3" sm="4">
                             <p class="text-left ml-4">Total Promo </p>
                         </v-col>
                         <v-col cols="1">
                              <p class="text-left">:</p>
                         </v-col>
-                        <v-col cols="9">
+                        <v-col xl="9" lg="9" md="8" sm="7">
                             <p class="text-left" >Rp {{ this.formPembayaran.totalPromo }},00</p>
                         </v-col>
                     </v-row>
                     <v-row dense no-gutters>
-                        <v-col cols="2">
+                        <v-col xl="2" lg="2" md="3" sm="4">
                             <p class="text-left ml-4">Total Biaya Mobil </p>
                         </v-col>
                         <v-col cols="1">
                              <p class="text-left">:</p>
                         </v-col>
-                        <v-col cols="9">
+                        <v-col xl="9" lg="9" md="8" sm="7">
                             <p class="text-left" >Rp {{ this.formPembayaran.totalBiayaMobil }},00</p>
                         </v-col>
                     </v-row>
                     <v-row dense no-gutters>
-                        <v-col cols="2">
+                        <v-col xl="2" lg="2" md="3" sm="4">
                             <p class="text-left ml-4">Total Biaya Driver </p>
                         </v-col>
                         <v-col cols="1">
                              <p class="text-left">:</p>
                         </v-col>
-                        <v-col cols="9">
+                        <v-col xl="9" lg="9" md="8" sm="7">
                             <p class="text-left" >Rp {{ this.formPembayaran.totalBiayaDriver }},00</p>
                         </v-col>
                     </v-row>
                     <v-row dense no-gutters>
-                        <v-col cols="2">
+                        <v-col xl="2" lg="2" md="3" sm="4">
                             <p class="text-left ml-4">Denda </p>
                         </v-col>
                         <v-col cols="1">
                              <p class="text-left">:</p>
                         </v-col>
-                        <v-col cols="9">
+                        <v-col xl="9" lg="9" md="8" sm="7">
                             <p class="text-left" >Rp {{ this.formPembayaran.dendaPeminjaman }},00</p>
                         </v-col>
                     </v-row>
                     <v-row dense no-gutters>
-                        <v-col cols="2">
+                        <v-col xl="2" lg="2" md="3" sm="4">
                             <p class="text-left ml-4">Total Biaya </p>
                         </v-col>
                         <v-col cols="1">
                              <p class="text-left">:</p>
                         </v-col>
-                        <v-col cols="9">
+                        <v-col xl="9" lg="9" md="8" sm="7">
                             <p class="text-left" >Rp {{ this.formPembayaran.totalBiaya }},00</p>
                         </v-col>
                     </v-row>
                     <v-row dense no-gutters>
-                        <v-col cols="2">
+                        <v-col xl="2" lg="2" md="3" sm="4">
                             <p class="text-left ml-4">Status Pembayaran </p>
                         </v-col>
                         <v-col cols="1">

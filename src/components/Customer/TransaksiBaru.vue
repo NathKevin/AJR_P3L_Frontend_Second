@@ -260,7 +260,7 @@
                                                             <p class="text-left"> No. Telepon : {{ item.noTelpDriver }}</p>
                                                             <p class="text-left"> Harga Sewa /hari: Rp {{ item.hargaSewaDriver }},00</p>
                                                             <p class="text-left"> Ratings : 
-                                                                <v-rating readonly :v-model="item.rerataRating" background-color="yellow darken-2" color="yellow"></v-rating>
+                                                                <v-rating readonly :value="item.rerataRating" background-color="yellow darken-2" color="yellow darken-2"></v-rating>
                                                             </p>
                                                         </v-col>
                                                         <v-col sm="12" md="12" lg="2" xl="2">
@@ -347,7 +347,7 @@
                                             <p class="text-left"> No. Telepon : {{ formSelectedDriver.noTelpDriver }}</p>
                                             <p class="text-left"> Harga Sewa /hari : Rp {{ formSelectedDriver.hargaSewaDriver }},00 </p>
                                             <p class="text-left"> Ratings : 
-                                                <v-rating readonly :v-model="formSelectedDriver.rerataRating" background-color="yellow darken-2" color="yellow"></v-rating>
+                                                <v-rating readonly :value="formSelectedDriver.rerataRating" background-color="yellow darken-2" color="yellow darken-2"></v-rating>
                                             </p>
                                         </v-col>
                                     </v-row>
@@ -414,7 +414,7 @@
             </div>
         </v-snackbar>
 
-        <v-snackbar v-model="snackbar2" :color="color" timeout="3000" bottom >{{ success_message }}</v-snackbar>
+        <v-snackbar v-model="snackbar2" :color="color" timeout="3000" bottom >{{ error_message }}</v-snackbar>
 
     </v-main>
 </template>
@@ -701,7 +701,7 @@ export default {
             }).catch(error => {
                 this.error_message = error.response.data.message;
                 this.color = "red";
-                this.snackbar = true;
+                this.snackbar2 = true;
             });
         },
         async getAllPromo(){
@@ -725,7 +725,7 @@ export default {
                     }
                 }
                 if(this.promos[i].kode == 'MHS'){
-                    if(sessionStorage.getItem('KP') != null){
+                    if(sessionStorage.getItem('KP') != "null"){
                         this.promosAvailable.push(this.promos[i]);
                     }
                 }

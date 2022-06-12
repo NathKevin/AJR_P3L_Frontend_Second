@@ -12,8 +12,10 @@ Vue.config.productionTip = false
 
 Vue.prototype.$moment = moment
 Vue.prototype.$http = axios //code standar untuk menggunakan axios
-Vue.prototype.$api = 'http://127.0.0.1:8000/api' //link backend
-Vue.prototype.$baseUrl = 'http://127.0.0.1:8000' //link backend untuk foto
+Vue.prototype.$api = 'https://backendajrp3l.nathkevin.com/api' //link backend
+Vue.prototype.$baseUrl = 'https://backendajrp3l.nathkevin.com' //link backend untuk foto
+// Vue.prototype.$api = 'http://127.0.0.1:8000/api' //link backend
+// Vue.prototype.$baseUrl = 'http://127.0.0.1:8000' //link backend
 
 Date.prototype.substractHours= function(h){
   this.setHours(this.getHours()-h);

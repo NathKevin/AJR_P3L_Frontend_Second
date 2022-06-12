@@ -1,6 +1,6 @@
 <template>
     <v-main class="ubahEmail">
-        <br><br><br><br><br>
+        <br><br><br><br>
         <v-progress-circular
             size="60"
             v-if="load"
@@ -8,7 +8,8 @@
             color="primary"
         ></v-progress-circular>
         <v-overlay :value="load"></v-overlay>
-        <v-container class="backgroundContainer" fill-height fluid>
+
+        <v-container v-show="breakPointMobile" class="backgroundContainer" fill-height fluid>
             <v-row justify="center" align="center">
                 <v-card v-if="dialog" elevation="20" class="backgroundCard" width="800" height="500" max-height="600" max-width="900">
                     <v-row>
@@ -101,12 +102,97 @@
             </v-row>
         </v-container>
 
+        <v-container v-show="breakPointMobile1" fluid>
+            <v-card color="blue darken-4" class="overlap2" height="auto" width="auto">
+                <br>
+                <v-card-sub-title >
+                    <h5 class="ml-5 mr-5 white--text" style="text-align:justify;">
+                        Ubahlah password anda dengan kekuatan yang tinggi.
+                    </h5>
+                </v-card-sub-title>
+                <br>
+                <v-card-sub-title >
+                    <h5 class="ml-5 mr-5 white--text" style="text-align:left;">
+                        Panduan Ubah Password :
+                    </h5>
+                </v-card-sub-title>
+                <v-card-sub-title >
+                    <h5 class="ml-5 mr-5 white--text" style="text-align:left;">
+                        1. Isilah password lama anda pada field Password Lama
+                    </h5>
+                    <h5 class="ml-5 mr-5 white--text" style="text-align:left;">
+                        2. Isilah password baru anda pada field Password Baru
+                    </h5>
+                    <h5 class="ml-5 mr-5 white--text" style="text-align:left;">
+                        3. Isilah Password baru dengan ketentuan terdiri dari Huruf kapital, Huruf kecil, Angka, dan Simbol, serta minimal 8 karakter.
+                    </h5>
+                    <h5 class="ml-5 mr-5 white--text" style="text-align:left;">
+                        4. Isilah field Konfirmasi Password baru anda dengan mengisi password yang sama dengan field Password Baru.
+                    </h5>
+                </v-card-sub-title>
+                <br>
+            </v-card>
+        </v-container>
+
+        <v-container v-show="breakPointMobile1" fluid>
+            <v-card v-if="dialog" elevation="20"  width="auto" height="auto" >
+                <v-card-title class="justify-center">
+                    <h3 style="margin-top:70px;">ATMA JOGJA RENTAL</h3>
+                </v-card-title>
+                <v-card-sub-title>
+                    <h5>Ubah Password</h5>
+                </v-card-sub-title>
+                <br>
+                <br>
+                <v-container>
+                    <v-form ref="form">
+                        <v-text-field
+                            dense
+                            outlined
+                            rounded
+                            type="password"
+                            v-model="form.oldPassword"
+                            label="Password Lama"
+                            :rules="rules.null"
+                        >
+                        </v-text-field>
+                        <v-text-field
+                            dense
+                            outlined
+                            rounded
+                            type="password"
+                            v-model="form.password"
+                            label="Password Baru"
+                            :rules="rules.null"
+                        >
+                        </v-text-field>
+                        <v-text-field
+                            dense
+                            outlined
+                            rounded
+                            type="password"
+                            v-model="form.confirmPassword"
+                            label="Konfirmasi Password Baru"
+                            :rules="rules.null"
+                        >
+                        </v-text-field>
+                    </v-form>
+                    <br>
+                    <v-btn plain class="btnLogin blue darken-4" >
+                        <span @click="dialogWarning = !dialogWarning" class="btnLogin2 white--text">Ubah</span>
+                    </v-btn>
+                    <br><br><br>
+                </v-container>
+            </v-card>
+            <br><br>
+        </v-container>
+
         <v-dialog v-model="dialogWarning" width="500">
             <v-card elevation="10" width="auto" height="auto">
                 <v-toolbar color="white--text" class="yellow darken-3">
                     <span  class="headline">Konfirmasi</span>
                 </v-toolbar>
-                <h3 class="mt-5" >Anda yakin ingin mengganti Email anda?</h3>
+                <h3 class="mt-5" >Anda yakin ingin mengganti Password anda?</h3>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="blue darken-1" text @click="dialogWarning = !dialogWarning"> Cancel </v-btn>
@@ -160,6 +246,24 @@ export default {
         }
     },
 
+    computed:{
+        breakPointMobile(){
+            if(this.$vuetify.breakpoint.width > 620){
+                return true
+            }else{
+                return false
+            }
+        },
+
+        breakPointMobile1(){
+            if(this.$vuetify.breakpoint.width <= 620){
+                return true
+            }else{
+                return false
+            }
+        },
+    },
+
     methods:{
         toHome(){
             this.$router.push({
@@ -190,15 +294,15 @@ export default {
                     this.success_message = response.data.message;
                     this.color = "green";
                     this.snackbar2 = true;
-                    this.clear();
                     this.load = false;
+                    this.dialogWarning = false;
                     this.dialog = true;
                 }).catch(error => {
                     this.error_message = error.response.data.message;
                     this.color = "red";
                     this.snackbar = true;
-                    sessionStorage.removeItem('token');
                     this.load = false;
+                    this.dialogWarning = false;
                     this.dialog = true;
                 })
             }
@@ -272,6 +376,12 @@ export default {
 
 .overlap{
    position:absolute;
+   animation: fadeInAnimation ease 3s;
+    animation-iteration-count: 0.65;
+    animation-fill-mode: forwards;
+}
+
+.overlap2{
    animation: fadeInAnimation ease 3s;
     animation-iteration-count: 0.65;
     animation-fill-mode: forwards;

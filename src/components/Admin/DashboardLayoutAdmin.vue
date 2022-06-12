@@ -39,9 +39,11 @@
             <v-app-bar-nav-icon  @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
             <VSpacer/>
             <v-avatar>
-                <v-img src="https://w7.pngwing.com/pngs/981/645/png-transparent-default-profile-united-states-computer-icons-desktop-free-high-quality-person-icon-miscellaneous-silhouette-symbol.png"></v-img>
+                <v-img v-if="cekImage()" :src="$baseUrl+'/storage/'+this.picture"></v-img>
+                <v-img v-else src="https://w7.pngwing.com/pngs/981/645/png-transparent-default-profile-united-states-computer-icons-desktop-free-high-quality-person-icon-miscellaneous-silhouette-symbol.png"></v-img>
             </v-avatar>
-            <h4 class="white--text ml-3 mr-6" >Admin Name</h4>
+            <h4 v-if="cekImage()" class="white--text ml-3 mr-6" >{{ name }}</h4>
+            <h4 v-else class="white--text ml-3 mr-6" >Admin Name</h4>
             <v-divider vertical></v-divider>
             <v-divider vertical></v-divider>
             <v-divider vertical></v-divider>
@@ -64,6 +66,8 @@ export default {
     name: "Dashboard",
     data() {
         return{
+            name: sessionStorage.getItem('name'),
+            picture: sessionStorage.getItem('picture'),
             drawer: true, //ini tambahan GD11
             items: [
                 {icon: "mdi-account-circle", title: "Pegawai", to: "/pegawai"},
@@ -76,11 +80,21 @@ export default {
     },
 
     methods: {
+        cekImage(){
+            if(this.picture != null){
+                return true
+            }else{
+                return false
+            }
+        },
         logout(){
             sessionStorage.removeItem("token");
             sessionStorage.removeItem("id");
             sessionStorage.removeItem("role");
             sessionStorage.removeItem("name");
+            sessionStorage.removeItem("picture");
+            sessionStorage.removeItem("idRole");
+            sessionStorage.removeItem("email");
             this.$router.push({
                 name: 'Login',
             });

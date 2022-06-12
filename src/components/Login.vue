@@ -2,16 +2,20 @@
     <v-main class="login">
 
         <v-navigation-drawer class="blue darken-4" v-model="sidebar" app disable-resize-watcher>
-            <v-list dense nav>
+            <v-toolbar class="blue darken-4" elevation="10">
+                <p class="white--text" style="margin-top:20px;">Navigation</p>
+            </v-toolbar>
+            <v-list  dense nav style="margin-top:20px;">
                 <v-list-item
-                    v-for="item in menuItems"
-                    :key="item.title"
-                    link
-                    tag="router-link"
-                    :to="item.path"
-                    class="yellow darken-3"
-                    color="yellow darken-1"
-                >
+                v-for="item in menuItems"
+                :key="item.title"
+                link
+                :to="item.path"
+                class="yellow darken-3"
+                color="yellow darken-1">
+                    <v-list-item-icon>
+                        <v-icon color="white" v-text="item.icon"></v-icon>
+                    </v-list-item-icon>
                     <v-list-item-content >
                         <v-list-item-title class="white--text" v-text="item.title"></v-list-item-title>
                     </v-list-item-content>
@@ -20,7 +24,7 @@
         </v-navigation-drawer>
 
         <v-app-bar fixed hide-on-scroll elevation="7" class="blue darken-4">
-            <span class="hidden-md-and-up">
+            <span class="hidden-lg-and-up">
                 <v-app-bar-nav-icon @click="sidebar = !sidebar">
                 </v-app-bar-nav-icon>
             </span>
@@ -34,7 +38,7 @@
             </router-link>
         </v-app-bar>
 
-        <v-container class="backgroundContainer" fill-height fluid>
+        <v-container v-show="breakPointMobile" class="backgroundContainer" fill-height fluid>
             <v-row justify="center" align="center">
                 <v-card elevation="20" class="backgroundCard" width="800" height="500" max-height="600" max-width="900">
                     <v-row>
@@ -86,7 +90,7 @@
                         <v-col>
                             <v-container fill-height fluid>
                                 <v-row class="mr-1" justify="center" align="center">
-                                        <v-card class="overlap" height="300" width="300" max-width="300" max-height="300">
+                                        <v-card class="overlap" height="300" width="auto" max-width="300" max-height="300">
                                             <v-icon class="mt-12" size="50px">mdi-login</v-icon>
                                             <br><br>
                                             <v-card-sub-title >
@@ -102,6 +106,65 @@
                     </v-row>
                 </v-card>
             </v-row>
+        </v-container>
+
+        <v-container style="margin-top:80px;" v-show="breakPointMobile1"  fluid>
+            <v-card elevation="20" height="auto" width="auto">
+                    <v-card-title class="justify-center mt-10">
+                        <h3 style="margin-top:35px;">ATMA JOGJA RENTAL</h3>
+                    </v-card-title>
+                    <v-card-sub-title>
+                        <h5>Login Page</h5>
+                    </v-card-sub-title>
+                    <br>
+                    <br>
+                    <v-container>
+                        <v-form ref="form">
+
+                            <v-text-field
+                                dense
+                                outlined
+                                rounded
+                                v-model="email"
+                                label="Email"
+                                :rules="rules.null"
+                            >
+                            </v-text-field>
+                            <v-text-field
+                                dense
+                                outlined
+                                rounded
+                                type="password"
+                                v-model="pass"
+                                label="Password"
+                                :rules="rules.null"
+                            >
+                            </v-text-field>
+                        </v-form>
+                        <br><br>
+                        <v-btn plain class="btnLogin blue darken-4" >
+                            <span @click="submit" class="btnLogin2 white--text">LOGIN</span>
+                        </v-btn>
+                        <br><br>
+                        <v-card-sub-title >
+                            <h5 class="ml-5 mr-5 mb-3" style="text-align:center;">
+                                Belum memiliki akun? <a href="Register">Daftar disini</a>
+                            </h5>
+                        </v-card-sub-title>
+                        <br>
+                    </v-container>
+            </v-card>
+        </v-container>
+
+        <v-container v-show="breakPointMobile1" fluid>
+            <v-card color="blue darken-4" class="overlap" height="auto" width="auto">
+                <v-card-sub-title >
+                    <h5 class="pt-2 pb-2 ml-5 mr-5 white--text" style="text-align:justify;">
+                        Login lah ke website kami untuk mengakses penuh fasilitas peminjaman 
+                        transportasi dan nikmati perjalanan anda bersama keluarga maupun teman di Yogayakarta.
+                    </h5>
+                </v-card-sub-title>
+            </v-card>
         </v-container>
 
         <v-snackbar v-model="snackbar" :color="color" timeout="3000" bottom >
@@ -133,8 +196,10 @@ export default {
             email: null,
             pass: null,
             AJRlogo: image,
-            menuItems:[
-                { title: 'Beranda', path: '/AtmaJayaRental' },
+            menuItems: [
+                { title: 'Beranda', path: '/Beranda', icon: 'mdi-home' },
+                { title: 'Register', path: '/Register', icon: 'mdi-plus' },
+                { title: 'Login', path: '/Login', icon: 'mdi-login' }
             ],
             sidebar: false,
             rules: {
@@ -142,6 +207,24 @@ export default {
                     [val => !!val  || 'This field is required'],
             },
         }
+    },
+
+    computed:{
+        breakPointMobile(){
+            if(this.$vuetify.breakpoint.width > 620){
+                return true
+            }else{
+                return false
+            }
+        },
+
+        breakPointMobile1(){
+            if(this.$vuetify.breakpoint.width <= 620){
+                return true
+            }else{
+                return false
+            }
+        },
     },
 
     methods:{
@@ -169,6 +252,7 @@ export default {
                         sessionStorage.setItem('waiting',response.data.user.waiting);
                         sessionStorage.setItem('role',response.data.role);
                         sessionStorage.setItem('token',response.data.token);
+                        sessionStorage.setItem('rate',response.data.user.ratingAJR);
                     }else if(response.data.role == 'pegawai'){
                         sessionStorage.setItem('id',response.data.user.idPegawai);
                         sessionStorage.setItem('name',response.data.user.namaPegawai);
@@ -176,6 +260,7 @@ export default {
                         sessionStorage.setItem('role',response.data.role);
                         sessionStorage.setItem('idRole',response.data.user.idRole);
                         sessionStorage.setItem('token',response.data.token);
+                        sessionStorage.setItem('email',response.data.user.email);
                     }else if(response.data.role == 'driver'){
                         this.success_message = 'Akun Driver tidak memiliki akses website, Login melalui aplikasi Mobile';
                         this.color = "yellow darken-3";
@@ -259,7 +344,6 @@ export default {
 }
 
 .overlap{
-   position:absolute;
    animation: fadeInAnimation ease 3s;
     animation-iteration-count: 0.65;
     animation-fill-mode: forwards;

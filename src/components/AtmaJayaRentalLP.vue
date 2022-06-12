@@ -4,14 +4,25 @@
 
     <v-main class="landingpage">
         
-        <v-navigation-drawer v-model="sidebar" app disable-resize-watcher>
-            <v-list>
-                <v-list-tile
+        <v-navigation-drawer class="blue darken-4" v-model="sidebar" app disable-resize-watcher>
+            <v-toolbar class="blue darken-4" elevation="10">
+                <p class="white--text" style="margin-top:20px;">Navigation</p>
+            </v-toolbar>
+            <v-list  dense nav style="margin-top:20px;">
+                <v-list-item
                 v-for="item in menuItems"
                 :key="item.title"
-                :to="item.path">
-                <v-list-tile-content>{{ item.title }}</v-list-tile-content>
-                </v-list-tile>
+                link
+                :to="item.path"
+                class="yellow darken-3"
+                color="yellow darken-1">
+                    <v-list-item-icon>
+                        <v-icon color="white" v-text="item.icon"></v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content >
+                        <v-list-item-title class="white--text" v-text="item.title"></v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
             </v-list>
         </v-navigation-drawer>
 
@@ -62,22 +73,17 @@
                 >
                 </v-carousel-item>
             </v-carousel>
+            <div class="overlap" >
+                <v-container> 
+                     <h1 class="white--text">Kami hadir untuk memberikan kenyamanan anda dalam bertransportasi bersama keluarga dan teman</h1>
+                </v-container>
+            </div>
             </template>
         </div>
 
-        <div class="overlap">
-            <v-card height="800" width="560" elevation="20">
-            <v-container bg fill-height grid-list-md> 
-                <v-layout row wrap align-center>
-                    <v-flex>
-                        <h1 class="text-right">Kami hadir untuk memberikan kenyamanan anda dalam bertransportasi bersama keluarga dan teman</h1>
-                    </v-flex>
-                </v-layout>
-            </v-container>
-            </v-card>
-        </div>
+        
 
-        <div id="mobil">
+        <div id="mobil" v-show="breakPointMobile3">
             <v-card height="600" max-height="800" max-width="100%" >
                 <v-container fluid fill-height>
                     <v-row>
@@ -187,6 +193,81 @@
             </v-card>
         </div>
 
+        <div v-show="breakPointMobile2">
+            <v-card height="500" max-height="800" max-width="100%" >
+                <v-container fluid fill-height>
+                    <template>
+                    <v-row>
+                        <v-col
+                        v-for="n in car2"
+                        :key="n"
+                        class="d-flex child-flex"
+                        cols="4"
+                        >
+                        <v-img
+                            :src="n.src"
+                            aspect-ratio="2"
+                            class="grey lighten-2"
+                        >
+                            <template v-slot:placeholder>
+                            <v-row
+                                class="fill-height ma-0"
+                                align="center"
+                                justify="center"
+                            >
+                                <v-progress-circular
+                                indeterminate
+                                color="grey lighten-5"
+                                ></v-progress-circular>
+                            </v-row>
+                            </template>
+                        </v-img>
+                        </v-col>
+                        <v-col>
+                            <v-container bg fill-height grid-list-md> 
+                                <v-layout row wrap align-center>
+                                    <v-flex>
+                                        <h2 v-scrollanimation>Kami menyediakan mobil berkualitas dengan harga terjangkau</h2>
+                                    </v-flex>
+                                </v-layout>
+                            </v-container>
+                            <v-btn v-scrollanimation class="blue darken-4 white--text" @click="dialog = true"> Lihat Mobil</v-btn>
+                        </v-col>
+                    </v-row>
+                    </template>
+                    <template>
+                    <v-row>
+                        <v-col
+                        v-for="n in car3"
+                        :key="n"
+                        class="d-flex child-flex"
+                        cols="4"
+                        >
+                        <v-img
+                            :src="n.src"
+                            aspect-ratio="2"
+                            class="grey lighten-2"
+                        >
+                            <template v-slot:placeholder>
+                            <v-row
+                                class="fill-height ma-0"
+                                align="center"
+                                justify="center"
+                            >
+                                <v-progress-circular
+                                indeterminate
+                                color="grey lighten-5"
+                                ></v-progress-circular>
+                            </v-row>
+                            </template>
+                        </v-img>
+                        </v-col>
+                    </v-row>
+                    </template>
+                </v-container>
+            </v-card>
+        </div>
+
         <div>
             <v-card class="bgBeranda" height="200" max-height="800" max-width="100%" >
                 <v-container fluid fill-height>
@@ -202,7 +283,7 @@
                 <template>
                     <v-parallax height="800" :src="BG1"  >
                         <v-row justify="center" align="center" dense>
-                            <v-img v-scrollanimation :src="AJRlogocrop" max-height="600" max-width="600"></v-img>
+                            <v-img v-scrollanimation :src="AJRlogocrop" :max-height="breakPointMobile" :max-width="breakPointMobile"></v-img>
                         </v-row>
                         <v-row justify="center" align="center" dense>
                             <v-btn elevation="10" class="blue darken-4 white--text" router :to="{name: 'Register'}" > Bergabung sekarang</v-btn>
@@ -213,7 +294,7 @@
         </div>
 
         <div id="tentang">
-            <v-card v-scrollanimation height="950" max-height="1000" max-width="100%" >
+            <v-card v-scrollanimation height="auto" max-height="auto" max-width="100%" >
                 <h1 class="text-right mb-8 pt-5 mr-8">Tentang Atma Jogja Rental</h1>
                 <template>
                     <v-container>
@@ -244,12 +325,12 @@
         </div>
 
         <div id="hubungi_kami">
-            <v-card v-scrollanimation height="300" max-height="1000" max-width="100%" >
+            <v-card v-scrollanimation height="auto" max-height="auto" max-width="100%" >
                 <h1  class="text-left mb-8 pt-5 ml-8">Kontak Kami</h1>
                 <template>
                     <v-container fluid>
                         <v-row>
-                            <v-col cols="4">
+                            <v-col xl="4" lg="4" md="8" sm="12">
                                 <v-card
                                     v-scrollanimation
                                     class="mx-auto"
@@ -265,7 +346,7 @@
 
                                 </v-card>
                             </v-col>
-                            <v-col cols="4">
+                            <v-col xl="4" lg="4" md="8" sm="12">
                                 <v-card
                                     v-scrollanimation
                                     class="mx-auto"
@@ -282,7 +363,7 @@
                                     
                                 </v-card>
                             </v-col>
-                            <v-col cols="4">
+                            <v-col xl="4" lg="4" md="8" sm="12" >
                                 <v-card
                                     v-scrollanimation
                                     class="mx-auto"
@@ -322,7 +403,7 @@
             </v-card>
         </div> -->
 
-        <v-dialog v-model="dialog" max-width="850">
+        <v-dialog v-model="dialog" max-width="850px" :fullscreen="$vuetify.breakpoint.mobile">
             <v-card>
                 <v-toolbar class="blue darken-4 white--text">
                     <h3>Daftar Jenis Mobil</h3>
@@ -340,27 +421,15 @@
                     <v-list three-line elevation="10" dense>
                         <v-list-item-group>
                             <v-row>
-                                <v-list-item disabled dense>
-                                    <v-col cols="6">
-                                        <strong>Gambar</strong>
-                                    </v-col>
-                                    <v-col cols="6">
-                                        <strong>Atribut</strong>
-                                    </v-col>
-                                </v-list-item>
-                            </v-row>
-                            <v-divider></v-divider>
-                            <v-divider></v-divider>
-                            <v-row>
                                 <v-list-item  v-for="car in car1" :key="car.id" >
-                                    <v-col>
+                                    <v-col >
                                         <div class="subheading pt-4">
-                                            <v-img :src='car.src' height="200px" max-height="200px"  max-width="400px" />
+                                            <v-img :src='car.src' :height="h" :max-height="h"  :max-width="w" />
                                         </div>
                                     </v-col>
                                     <v-divider vertical></v-divider>
                                     <v-divider vertical></v-divider>
-                                    <v-col class="text-left ml-7">
+                                    <v-col class="text-left ml-7" lg="6" xl="6" md="6" sm="6">
                                         Nama : {{ car.nama }} <br>
                                         Transmisi : {{ car.transmisi }} <br>
                                         Harga : {{ car.harga }} <br>
@@ -369,14 +438,14 @@
                             </v-row>
                             <v-row>
                                 <v-list-item  v-for="car in car2" :key="car.id" >
-                                    <v-col>
+                                    <v-col >
                                         <div class="subheading pt-4">
-                                            <v-img :src='car.src' height="200px" max-height="200px" max-width="400px" />
+                                            <v-img :src='car.src' :height="h" :max-height="h"  :max-width="w" />
                                         </div>
                                     </v-col>
                                     <v-divider vertical></v-divider>
                                     <v-divider vertical></v-divider>
-                                    <v-col class="text-left ml-7">
+                                    <v-col class="text-left ml-7" >
                                         Nama : {{ car.nama }} <br>
                                         Transmisi : {{ car.transmisi }} <br>
                                         Harga : {{ car.harga }} <br>
@@ -385,14 +454,14 @@
                             </v-row>
                             <v-row>
                                 <v-list-item  v-for="car in car3" :key="car.id" >
-                                    <v-col>
+                                    <v-col >
                                         <div class="subheading pt-4">
-                                            <v-img :src='car.src' height="200px" max-height="200px" max-width="400px" />
+                                            <v-img :src='car.src' :height="h" :max-height="h"  :max-width="w" />
                                         </div>
                                     </v-col>
                                     <v-divider vertical></v-divider>
                                     <v-divider vertical></v-divider>
-                                    <v-col class="text-left ml-7">
+                                    <v-col class="text-left ml-7" >
                                         Nama : {{ car.nama }} <br>
                                         Transmisi : {{ car.transmisi }} <br>
                                         Harga : {{ car.harga }} <br>
@@ -457,6 +526,8 @@ export default {
     name : "LandingPage",
     data() {
         return{
+            h:200,
+            w:400,
             dialog: false,
             sidebar: false,
             AJRlogo : image,
@@ -481,9 +552,9 @@ export default {
                 'mdi-instagram',
             ],
             menuItems: [
-                { title: 'Home', path: '/home', icon: '' },
-                { title: 'Sign Up', path: '/signup', icon: '' },
-                { title: 'Sign In', path: '/signin', icon: '' }
+                { title: 'Beranda', path: '/Beranda', icon: 'mdi-home' },
+                { title: 'Register', path: '/Register', icon: 'mdi-plus' },
+                { title: 'Login', path: '/Login', icon: 'mdi-login' }
             ],
             car1:[
                 {id:1 ,src: require("../assets/car1/Brio.jpg"), nama:"Honda Brio", transmisi:"Automatic", harga:"Rp 200.000/hari"},
@@ -517,7 +588,43 @@ export default {
         scrollMeTo(ref){
             const el = document.querySelector(ref)
             el && el.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" })
+        },
+        breakpoint(){
+            console.log(this.$vuetify.breakpoint.width)
+            if(this.$vuetify.breakpoint.width <= 700){
+                this.h = 90
+                this.w = 180
+            }
         }
+    },
+    mounted() {
+        this.breakpoint()
+    },
+
+    computed:{
+        breakPointMobile(){
+            if(this.$vuetify.breakpoint.width <= 700){
+                return 250
+            }else{
+                return 500
+            }
+        },
+
+        breakPointMobile2(){
+            if(this.$vuetify.breakpoint.width <= 950){
+                return true
+            }else{
+                return false
+            }
+        },
+
+        breakPointMobile3(){
+            if(this.$vuetify.breakpoint.width > 950){
+                return true
+            }else{
+                return false
+            }
+        },
     }
 }
 </script>
@@ -548,12 +655,16 @@ export default {
     background-color: rgba(0, 0, 0, 0.7);
     display: block;
     position: relative;
+    text-align: center;
 }
 
 .overlap{
-   position:absolute;
+   position: absolute; 
+    left: 0; 
+    right: 0; 
+   display: flex;
+   margin-top: 310px;
    top: 0;
-   right: 0;
    animation: fadeInAnimation ease 3s;
     animation-iteration-count: 0.65;
     animation-fill-mode: forwards;
@@ -588,6 +699,14 @@ export default {
 .enter{
     opacity: 1;
     transform: translateY(0px);
+}
+
+@media screen and (max-width: 600px) {
+  .overlap {
+      display: flex;
+  }
+  .carousel{
+  }
 }
 
 /* .reveal:link {

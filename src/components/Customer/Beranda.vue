@@ -14,7 +14,7 @@
                     <v-overlay :value="load"></v-overlay>
                     <v-card elevation="10" class="overlap" v-if="isTransaksi" width="auto" height="auto" max-height="auto">
                         <v-toolbar class="cyan lighten-2" min-height="80" max-height="auto">
-                            <h2 v-if="this.transaksi.statusTransaksi == 'Peminjaman Berlangsung'" class=" ml-7 mt-4 text-left">Peminjaman yang sedang berlangsung</h2>
+                            <h2 v-if="this.transaksi.statusTransaksi == 'Peminjaman Berlangsung'" class=" ml-7 mt-4 text-left">Peminjaman sedang berlangsung</h2>
                             <h2 v-else-if="this.transaksi.statusTransaksi == 'Diterima'" class=" ml-7 mt-4 text-left">Peminjaman telah diproses</h2>
                             <h2 v-else class=" ml-7 mt-4 text-left">Peminjaman dalam antrian</h2>
                             <v-spacer></v-spacer>
@@ -151,7 +151,7 @@
             <v-row>
                 <v-col sm="6" md="12" lg="6">
                     <v-hover v-slot="{hover}">
-                        <v-card elevation="10" class="overlap" v-if="other">
+                        <v-card elevation="10" class="overlap" v-if="other" height="auto" width="auto">
                             <v-toolbar class="cyan lighten-2 " min-height="50">
                                 <h3 class="ml-7 text-left">Berita Pengumuman</h3>
                             </v-toolbar>
@@ -170,14 +170,10 @@
                                         </h4>
                                     </div>
                                 </v-expand-transition>
-                            <v-toolbar style="opacity: 80%" absolute bottom width="750">
+                            <v-toolbar style="opacity: 80%" absolute bottom width="auto" max-width="auto">
                                 <v-card-title>
                                     <strong>Kami Hadir dengan website dan aplikasi mobile</strong> 
                                 </v-card-title>
-                                <v-spacer></v-spacer>
-                                <v-card-sub-title>
-                                    Lebih cepat, lebih efisien
-                                </v-card-sub-title>
                             </v-toolbar>
                         </v-card>
                     </v-hover>
@@ -347,6 +343,7 @@ export default {
     name: 'transaksi',
     data() {
         return {
+            idDriver : null,
             bukti: null,
             metodePembayaran: null,
             idMobil: null,
@@ -459,7 +456,7 @@ export default {
                     }
                 }
                 if(this.promos[i].kode == 'MHS'){
-                    if(sessionStorage.getItem('KP') != null){
+                    if(sessionStorage.getItem('KP') != "null"){
                         this.promosAvailable.push(this.promos[i].jenisPromo);
                     }
                 }
@@ -506,6 +503,7 @@ export default {
                 this.transaksi = response.data.data;
                 if(response.data.data != null){
                     this.isDitolak();
+                    this.idDriver = response.data.data.idDriver;
                     this.getCarName(response.data.data.idMobil);
                     this.getDriverName(response.data.data.idDriver);
                     this.getCustomerServiceName(response.data.data.idPegawai);
@@ -556,9 +554,30 @@ export default {
                 this.color = "green";
                 this.snackbar2 = true;
                 this.load = false;
-                if(this.detailForm.idDriver != null){
-                    console.log('INI ADA UBAH STATUS DRIVER DARI MOBILE')
+                if(this.idDriver != null){
+                    this.editStatusDriver();
+                }else{
+                    location.reload();
                 }
+            }).catch(error => {
+                this.error_message = error.response.data.message;
+                this.color = "red";
+                this.snackbar = true;
+                this.load = false;
+            });
+        },
+        editStatusDriver(){
+            var url = this.$api + '/updateStatusKetersediaan/driver/' + this.idDriver;
+            this.load = true;
+            this.$http.put(url, {
+                headers: {
+                    'Authorization' : 'Bearer ' + sessionStorage.getItem('token')
+                }
+            }).then(response => {
+                this.success_message = response.data.message;
+                this.color = "green";
+                this.snackbar2 = true;
+                this.load = false;
                 location.reload();
             }).catch(error => {
                 this.error_message = error.response.data.message;
